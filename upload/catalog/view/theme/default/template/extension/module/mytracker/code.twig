@@ -1,0 +1,54 @@
+<!-- Top.Mail.Ru counter -->
+<script type="text/javascript">
+    var _tmr = window._tmr || (window._tmr = []);
+
+    {% if module_mytracker_tracking_user %}
+        // Отправка UserID.
+        _tmr.push({ type: 'setUserID', userid: "{{ module_mytracker_user_id }}" });
+    {% endif %}
+
+    // Отправка lvid.
+    _tmr.push({
+        type:     'onready',
+        callback: function() {
+            const
+                cookieName = 'mytracker_lvid',
+                cookieValue = _tmr.getClientID();
+
+            document.cookie = encodeURIComponent(cookieName) + '=' + encodeURIComponent(cookieValue);
+        }
+    });
+
+    _tmr.push({id: "{{ module_mytracker_counter_id }}", type: "pageView", start: (new Date()).getTime()});
+
+    (function (d, w, id) {
+        if (d.getElementById(id)) return;
+        var ts = d.createElement("script");
+
+        ts.type = "text/javascript";
+        ts.async = true;
+        ts.id = id;
+        ts.src = "https://{{ module_mytracker_domain }}/js/code.js";
+
+        var f = function () {
+            var s = d.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(ts, s);
+        };
+
+        if (w.opera === "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "tmr-code");
+</script>
+<noscript>
+    <div>
+        <img
+                src="https://{{ module_mytracker_domain }}/counter?id={{ module_mytracker_counter_id }};js=na"
+                style="position:absolute;left:-9999px;"
+                alt="Top.Mail.Ru"
+        />
+    </div>
+</noscript>
+<!-- /Top.Mail.Ru counter -->

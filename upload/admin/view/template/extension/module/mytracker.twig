@@ -1,0 +1,173 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+
+            <!-- Кнопки управления -->
+            <div class="pull-right">
+                <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+
+            <!-- Название модуля -->
+            <h1>{{ heading_title }}</h1>
+
+            <!-- Хлебные крошки -->
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a data-toggle="tab" href="#mytracker-general">{{ text_tab_general }}</a></li>
+                        <li role="presentation"><a data-toggle="tab" href="#mytracker-additional">{{ text_tab_additional }}</a></li>
+                        <li role="presentation"><a data-toggle="tab" href="#mytracker-api">{{ text_tab_api }}</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="mytracker-general" role="tabpanel">
+                            <p>{{ text_tab_general_description }}</p>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-status">{{ text_entry_status }}</label>
+                                <div class="col-sm-4">
+                                    <select name="module_mytracker_status" id="input-status" class="form-control">
+                                        {% if module_mytracker_status %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                    <p class="help-block">{{ text_entry_status_help }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label required" for="module_mytracker_counter_id">{{ text_counter_id }}</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="module_mytracker_counter_id" id="module_mytracker_counter_id" class="form-control" placeholder="3309806" value="{{ module_mytracker_counter_id }}">
+                                    <p class="help-block">{{ text_counter_id_help }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="mytracker-additional" role="tabpanel">
+                            <p>{{ text_tab_additional_description }}</p>
+                            <div class="form-group">
+                                <label for="module_mytracker_domain" class="col-sm-2 control-label">{{ text_domain }}</label>
+                                <div class="col-sm-4">
+                                    <select name="module_mytracker_domain" id="module_mytracker_domain" class="form-control">
+                                        {% if module_mytracker_domain %}
+                                            <option value="1" selected="selected">RU</option>
+                                            <option value="0">COM</option>
+                                        {% else %}
+                                            <option value="1">RU</option>
+                                            <option value="0" selected="selected">COM</option>
+                                        {% endif %}
+                                    </select>
+                                    <p class="help-block">{{ text_domain_help }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_mytracker_tracking_user" class="col-sm-2 control-label">{{ text_tracking_user }}</label>
+                                <div class="col-sm-4">
+                                    <select name="module_mytracker_tracking_user" id="module_mytracker_tracking_user" class="form-control">
+                                        {% if module_mytracker_tracking_user %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                    <p class="help-block">{{ text_tracking_user_help }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_mytracker_amp_support" class="col-sm-2 control-label">{{ text_amp_support }}</label>
+                                <div class="col-sm-4">
+                                    <select name="module_mytracker_amp_support" id="module_mytracker_amp_support" class="form-control">
+                                        {% if module_mytracker_amp_support %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                    <p class="help-block">{{ text_amp_support_help }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="mytracker-api" role="tabpanel">
+                            <p>{{ text_tab_api_description }}</p>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label required" for="module_mytracker_app_id">{{ text_app_id }}</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="module_mytracker_app_id" id="module_mytracker_app_id" class="form-control" placeholder="83018" value="{{ module_mytracker_app_id }}">
+                                    <p class="help-block">{{ text_app_id_help }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label required" for="module_mytracker_api_key">{{ text_api_key }}</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="module_mytracker_api_key" id="module_mytracker_api_key" class="form-control" placeholder="6jT9Firgf35Z2zDEB0v8ZniAgr8WTq0IcZlecewFWZImrs5KXcRbdDMLgdQj05i" value="{{ module_mytracker_api_key }}">
+                                    <p class="help-block">{{ text_api_key_help }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_mytracker_tracking_login" class="col-sm-2 control-label">{{ text_tracking_login }}</label>
+                                <div class="col-sm-4">
+                                    <select name="module_mytracker_tracking_login" id="module_mytracker_tracking_login" class="form-control">
+                                        {% if module_mytracker_tracking_login %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                    <p class="help-block">{{ text_tracking_login_help }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_mytracker_tracking_registration" class="col-sm-2 control-label">{{ text_tracking_registration }}</label>
+                                <div class="col-sm-4">
+                                    <select name="module_mytracker_tracking_registration" id="module_mytracker_tracking_registration" class="form-control">
+                                        {% if module_mytracker_tracking_registration %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                    <p class="help-block">{{ text_tracking_registration_help }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-exclamation"></i>{{ text_module_warning_heading }}</h3>
+            </div>
+            <div class="panel-body">{{ text_module_warning_body }}</div>
+        </div>
+    </div>
+</div>
+{{ footer }}
