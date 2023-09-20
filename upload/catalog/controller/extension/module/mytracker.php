@@ -5,7 +5,7 @@
  */
 
 use GuzzleHttp\Client;
-
+ini_set('display_errors',1);
 class ControllerExtensionModuleMyTracker extends Controller {
 	/**
 	 * Базовый URL для API.
@@ -115,13 +115,17 @@ class ControllerExtensionModuleMyTracker extends Controller {
 			return;
 		}
 
-		if (!$this->customer->isLogged()) {
-			return;
+		if ($this->customer->isLogged()) {
+			$customerId = $this->customer->getId();
+		} elseif (!empty($data[0])) {
+			$customerId = $this->model_account_customer->getCustomerByEmail($data[0])['customer_id'];
+		} else {
+			$customerId = 0;
 		}
 
 		$this->sendLoginEvent(
 			[
-				'customUserId' => $this->customer->getId(),
+				'customUserId' => $customerId,
 			]
 		);
 	}
