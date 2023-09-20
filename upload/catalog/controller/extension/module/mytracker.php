@@ -5,7 +5,7 @@
  */
 
 use GuzzleHttp\Client;
-ini_set('display_errors',1);
+
 class ControllerExtensionModuleMyTracker extends Controller {
 	/**
 	 * Базовый URL для API.
