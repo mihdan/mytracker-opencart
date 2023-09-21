@@ -91,7 +91,7 @@ class ControllerExtensionModuleMyTracker extends Controller {
 
 		$data['module_mytracker_user_id'] = $this->customer->getId();
 		$data['module_mytracker_counter_id'] = $this->config->get('module_mytracker_counter_id');
-		$data['module_mytracker_tracking_user'] = (int) $this->config->get('module_mytracker_tracking_user') === 1 && (int) $this->customer->isLogged() === 1;
+		$data['module_mytracker_tracking_user'] = $this->config->get('module_mytracker_tracking_user') && $this->customer->isLogged();
 		$data['module_mytracker_domain'] = (int) $this->config->get('module_mytracker_domain') === 1
 			? 'top-fwz1.mail.ru'
 			: 'mytopf.com';
