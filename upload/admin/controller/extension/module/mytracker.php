@@ -6,7 +6,7 @@
  */
 class ControllerExtensionModuleMyTracker extends Controller {
 	const PREFIX = 'mytracker';
-	private $error = array();
+	private $error = false;
 
 	private $events = [
 		[
@@ -36,7 +36,7 @@ class ControllerExtensionModuleMyTracker extends Controller {
 		$this->load->model('extension/module/mytracker');
 		$this->load->language('extension/module/mytracker');
 
-		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate() ) {
 			$this->model_extension_module_mytracker->saveSettings();
 			$this->session->data['success'] = $this->language->get('text_success');
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
@@ -144,6 +144,13 @@ class ControllerExtensionModuleMyTracker extends Controller {
 			$data['module_mytracker_tracking_registration'] = $this->config->get('module_mytracker_tracking_registration');
 		}
 
+		// Отладка.
+		if (isset($this->request->post['module_mytracker_debug'])) {
+			$data['module_mytracker_debug'] = $this->request->post['module_mytracker_debug'];
+		} else {
+			$data['module_mytracker_debug'] = $this->config->get('module_mytracker_debug');
+		}
+
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
@@ -188,34 +195,34 @@ class ControllerExtensionModuleMyTracker extends Controller {
 		}
 	}
 
-	protected function validate() {}
+	protected function validate() {
+		if (!$this->user->hasPermission('modify', 'extension/module/mytracker')) {
+			$this->error = true;
+		}
+
+		return !$this->error;
+	}
 
 	public function menus(&$route, &$data, &$output) {
-
-		if (!$this->config->get('module_mytracker_status')) {
-			return null;
+		if (!$this->user->hasPermission('access', 'extension/module/mytracker')) {
+			return;
 		}
 
 		$this->load->language('extension/module/mytracker');
 
-		//print_r($data);die;
-
-		//if ($this->user->hasPermission('access', 'extension/module/mytracker')) {
-			$num = -1;
-			foreach($data['menus'] as $menus) {
-				$num ++;
-				foreach ($menus as $key => $value) {
-					if($value=='menu-marketing'){
-						$data['menus'][$num]['children'][] = array(
-							'name'     => $this->language->get('heading_title'),
-							'href'     => $this->url->link('extension/module/mytracker', 'user_token=' . $this->session->data['user_token'], true),
-							'children' => array()
-						);
-					};
-				}
-
+		$num = -1;
+		foreach($data['menus'] as $menus) {
+			$num ++;
+			foreach ($menus as $key => $value) {
+				if($value==='menu-marketing'){
+					$data['menus'][$num]['children'][] = array(
+						'name'     => $this->language->get('heading_title'),
+						'href'     => $this->url->link('extension/module/mytracker', 'user_token=' . $this->session->data['user_token'], true),
+						'children' => array()
+					);
+				};
 			}
 
-		//}
+		}
 	}
 }

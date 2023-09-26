@@ -111,15 +111,21 @@ class ControllerExtensionModuleMyTracker extends Controller {
 	 */
 	public function onCustomerLogin($route, $data, $output)
 	{
-		if (!$this->config->get('module_mytracker_tracking_login')) {
+		if (!$this->config->get('module_mytracker_tracking_login'))
+		{
 			return;
 		}
 
-		if ($this->customer->isLogged()) {
+		if ($this->customer->isLogged())
+		{
 			$customerId = $this->customer->getId();
-		} elseif (!empty($data[0])) {
+		}
+		elseif (!empty($data[0]))
+		{
 			$customerId = $this->model_account_customer->getCustomerByEmail($data[0])['customer_id'];
-		} else {
+		}
+		else
+		{
 			$customerId = 0;
 		}
 
@@ -141,7 +147,8 @@ class ControllerExtensionModuleMyTracker extends Controller {
 	 */
 	public function onCustomerRegistration($route, $data, $output)
 	{
-		if (!$this->config->get('module_mytracker_tracking_registration')) {
+		if (!$this->config->get('module_mytracker_tracking_registration'))
+		{
 			return;
 		}
 
@@ -159,8 +166,9 @@ class ControllerExtensionModuleMyTracker extends Controller {
 	 *
 	 * @return bool
 	 */
-	public function sendRegistrationEvent( array $data ): bool {
-		return $this->request( 'registration', $data );
+	public function sendRegistrationEvent(array $data): bool
+	{
+		return $this->request('registration', $data);
 	}
 
 	/**
@@ -170,8 +178,9 @@ class ControllerExtensionModuleMyTracker extends Controller {
 	 *
 	 * @return bool
 	 */
-	public function sendLoginEvent( array $data ): bool {
-		return $this->request( 'login', $data );
+	public function sendLoginEvent(array $data): bool
+	{
+		return $this->request('login', $data);
 	}
 
 	/**
@@ -182,7 +191,8 @@ class ControllerExtensionModuleMyTracker extends Controller {
 	 *
 	 * @return true
 	 */
-	private function request(string $method, array $data): bool {
+	private function request(string $method, array $data): bool
+	{
 		$defaults = [
 			'eventTimestamp' => time(),
 		];
@@ -208,15 +218,21 @@ class ControllerExtensionModuleMyTracker extends Controller {
 				]
 			);
 
-			$this->log->write($method);
-			$this->log->write($data);
+			if ($this->isDebug())
+			{
+				$this->log->write($method);
+				$this->log->write($data);
+			}
 
 			return $response->getStatusCode() === 200;
-		} catch ( Exception $e ) {
-			$this->log->write($method);
-			$this->log->write($e->getMessage());
-			$this->log->write($data);
-
+		} catch ( Exception $e )
+		{
+			if ($this->isDebug())
+			{
+				$this->log->write($method);
+				$this->log->write($e->getMessage());
+				$this->log->write($data);
+			}
 			return false;
 		}
 
@@ -227,7 +243,8 @@ class ControllerExtensionModuleMyTracker extends Controller {
 	 *
 	 * @return string
 	 */
-	private function getLvId(): string {
+	private function getLvId(): string
+	{
 		$cookieName = 'mytracker_lvid';
 
 		$lvId = $_COOKIE[ $cookieName ] ?? '';
@@ -237,5 +254,15 @@ class ControllerExtensionModuleMyTracker extends Controller {
 		}
 
 		return $lvId;
+	}
+
+	/**
+	 * Проверяет включен ли режим отладке в плагине.
+	 *
+	 * @return bool
+	 */
+	private function isDebug(): bool
+	{
+		return (bool) $this->config->get('module_mytracker_debug');
 	}
 }
